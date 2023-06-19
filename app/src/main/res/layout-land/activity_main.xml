@@ -32,11 +32,6 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/title_fs"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@{viewModel.selectedMovie.title}" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
