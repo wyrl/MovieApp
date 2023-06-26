@@ -41,7 +41,9 @@ public class MovieRepository {
                 if(response.isSuccessful()){
                     List<Movie> movieList = Movie.convertFrom(response.body());
                     movies.setValue(movieList);
-                    db.movieDao().insertAll(movieList);
+                    MovieDatabase.databaseWriteExecutor.execute(() -> {
+                        db.movieDao().insertAll(movieList);
+                    });
 
                 }
             }

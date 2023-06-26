@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Movie implements Serializable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "title")
@@ -29,16 +29,14 @@ public class Movie implements Serializable {
     @ColumnInfo(name = "image_url")
     private String imageUrl;
 
-    public Movie(int id, String title){
-        this.setId(id);
+    public Movie(String title){
         this.setTitle(title);
         this.setDescription("");
     }
 
-    public int getId() {
+    public int getId(){
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -86,7 +84,7 @@ public class Movie implements Serializable {
     public static List<Movie> convertFrom(List<MovieInfo> movieInfoList){
         List<Movie> movies = new ArrayList<>();
         for (MovieInfo info: movieInfoList) {
-            Movie movie = new Movie(Integer.parseInt(info.getImdbID()) , info.getTitle());
+            Movie movie = new Movie(info.getTitle());
             movie.setYearReleased(info.getReleased());
             movie.setImageUrl(info.getImages().get(0));
 
