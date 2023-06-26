@@ -1,19 +1,46 @@
 package com.example.movieapp.data.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Movie implements Serializable {
+
+    @PrimaryKey
+    private int id;
+
+    @ColumnInfo(name = "title")
     private String title;
+
+    @ColumnInfo(name = "description")
     private String description;
+
+    @ColumnInfo(name = "year_released")
     private String yearReleased;
+
+    @ColumnInfo(name = "ratings")
     private double ratings;
+
+    @ColumnInfo(name = "image_url")
     private String imageUrl;
 
-    public Movie(String title){
+    public Movie(int id, String title){
+        this.setId(id);
         this.setTitle(title);
         this.setDescription("");
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -59,7 +86,7 @@ public class Movie implements Serializable {
     public static List<Movie> convertFrom(List<MovieInfo> movieInfoList){
         List<Movie> movies = new ArrayList<>();
         for (MovieInfo info: movieInfoList) {
-            Movie movie = new Movie(info.getTitle());
+            Movie movie = new Movie(Integer.parseInt(info.getImdbID()) , info.getTitle());
             movie.setYearReleased(info.getReleased());
             movie.setImageUrl(info.getImages().get(0));
 
