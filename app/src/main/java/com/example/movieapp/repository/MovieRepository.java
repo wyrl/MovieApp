@@ -2,6 +2,7 @@ package com.example.movieapp.repository;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -27,24 +28,33 @@ public class MovieRepository {
         context = application.getApplicationContext();
         movies = new MutableLiveData<>();
         db = MovieDatabase.getDatabase(context);
-        initRetrofit();
+        loadData();
     }
 
-    private void initRetrofit(){
+    private void loadData(){
+        Log.d("MovieRepository", "loadData");
+        MovieDatabase.databaseWriteExecutor.execute(() -> {
+            List<Movie> movieList = db.movieDao().getAll();
+            if(movieList.size() != 0){
+                movies.postValue(movieList);
+                Log.d("MovieRepository", "Load from database");
+            }
+            else{
+                fetchFromAPI();
+                Log.d("MovieRepository", "Load from API");
+            }
+        });
+    }
+
+    private void fetchFromAPI(){
+
         RetrofitInstance.api.getMovies().enqueue(new Callback<List<MovieInfo>>() {
             @Override
             public void onResponse(@NonNull Call<List<MovieInfo>> call, @NonNull Response<List<MovieInfo>> response) {
                 if(response.isSuccessful()){
-                   /* List<Movie> movieList = Movie.convertFrom(response.body());
+                    List<Movie> movieList = Movie.convertFrom(response.body());
+                    saveIntoDatabase(movieList);
                     movies.setValue(movieList);
-                    MovieDatabase.databaseWriteExecutor.execute(() -> {
-                        db.movieDao().insertAll(movieList);
-                    });*/
-
-                    MovieDatabase.databaseWriteExecutor.execute(() -> {
-                        movies.postValue(db.movieDao().getAll());
-                    });
-
                 }
             }
 
@@ -54,6 +64,16 @@ public class MovieRepository {
             }
         });
     }
+
+    private void saveIntoDatabase(List<Movie> movieList){
+        if(movies.getValue() == null){
+            MovieDatabase.databaseWriteExecutor.execute(() -> {
+                db.movieDao().insertAll(movieList);
+            });
+        }
+    }
+
+
 
     public LiveData<List<Movie>> getMovies(){
         return movies;

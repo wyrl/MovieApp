@@ -25,7 +25,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:contentDescription="Movie Image"
+                android:contentDescription="@string/movie_image_desc"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -39,6 +39,7 @@
                 android:text="@{movie.title}"
                 android:textSize="@dimen/title_fs"
                 android:textStyle="bold"
+                tools:text="@string/sample_title"
                 app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView" />
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin1"
                 android:text="@{movie.yearReleased}"
+                tools:text="@string/sample_year_released"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/textView2"
                 app:layout_constraintStart_toEndOf="@+id/imageView" />
@@ -58,6 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(movie.ratings)}"
+                tools:text="Ratings"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView" />

@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("MainActivity", "onCreate");
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
