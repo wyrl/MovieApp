@@ -1,9 +1,13 @@
 package com.example.movieapp.repository;
 
+import android.app.Application;
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.movieapp.data.database.MovieDatabase;
 import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.data.model.MovieInfo;
 import com.example.movieapp.data.service.RetrofitInstance;
@@ -16,15 +20,29 @@ import retrofit2.Response;
 
 public class MovieRepository {
     private final MutableLiveData<List<Movie>> movies;
+    private MovieDatabase db;
+    private Context context;
 
-    public MovieRepository(){
+    public MovieRepository(Application application){
+        context = application.getApplicationContext();
         movies = new MutableLiveData<>();
+        db = MovieDatabase.getDatabase(context);
+        initRetrofit();
+    }
 
+    private void initDatabase(){
+
+    }
+
+    private void initRetrofit(){
         RetrofitInstance.api.getMovies().enqueue(new Callback<List<MovieInfo>>() {
             @Override
             public void onResponse(@NonNull Call<List<MovieInfo>> call, @NonNull Response<List<MovieInfo>> response) {
                 if(response.isSuccessful()){
-                    movies.setValue(Movie.convertFrom(response.body()));
+                    List<Movie> movieList = Movie.convertFrom(response.body());
+                    movies.setValue(movieList);
+                    db.movieDao().insertAll(movieList);
+
                 }
             }
 
