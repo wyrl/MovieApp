@@ -30,19 +30,19 @@ public class MovieRepository {
         initRetrofit();
     }
 
-    private void initDatabase(){
-
-    }
-
     private void initRetrofit(){
         RetrofitInstance.api.getMovies().enqueue(new Callback<List<MovieInfo>>() {
             @Override
             public void onResponse(@NonNull Call<List<MovieInfo>> call, @NonNull Response<List<MovieInfo>> response) {
                 if(response.isSuccessful()){
-                    List<Movie> movieList = Movie.convertFrom(response.body());
+                   /* List<Movie> movieList = Movie.convertFrom(response.body());
                     movies.setValue(movieList);
                     MovieDatabase.databaseWriteExecutor.execute(() -> {
                         db.movieDao().insertAll(movieList);
+                    });*/
+
+                    MovieDatabase.databaseWriteExecutor.execute(() -> {
+                        movies.postValue(db.movieDao().getAll());
                     });
 
                 }
