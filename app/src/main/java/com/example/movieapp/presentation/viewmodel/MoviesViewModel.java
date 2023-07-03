@@ -1,6 +1,8 @@
 package com.example.movieapp.presentation.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -39,7 +41,5 @@ public class MoviesViewModel extends AndroidViewModel {
     public void updateSelectedMovie(Movie movie){
         selectedMovie.setValue(movie);
     }
-
-
 
 }
