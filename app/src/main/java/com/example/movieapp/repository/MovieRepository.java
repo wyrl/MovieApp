@@ -47,7 +47,7 @@ public class MovieRepository {
     }
 
     private void fetchFromAPI(){
-
+        Log.d("MovieRepository", "fetchFromAPI");
         RetrofitInstance.api.getMovies().enqueue(new Callback<List<MovieInfo>>() {
             @Override
             public void onResponse(@NonNull Call<List<MovieInfo>> call, @NonNull Response<List<MovieInfo>> response) {
@@ -56,11 +56,14 @@ public class MovieRepository {
                     saveIntoDatabase(movieList);
                     movies.setValue(movieList);
                 }
+                else{
+                    Log.d("MovieRepository", "onReponse --> failure");
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<MovieInfo>> call, @NonNull Throwable t) {
-
+                Log.d("MovieRepository", "Failure...");
             }
         });
     }
