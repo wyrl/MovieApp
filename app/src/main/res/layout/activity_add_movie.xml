@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-
         tools:context=".presentation.view.AddMovieActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +20,15 @@
             android:padding="@dimen/default_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -33,6 +41,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -60,6 +69,13 @@
                 android:layout_height="wrap_content"
                 android:text="@={movie.imageUrl}"
                 android:hint="Enter Backdrop Image Link" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:gravity="top"
+                android:text="@={movie.description}"
+                android:hint="Enter Description"/>
 
             <Button
                 android:id="@+id/btnAddMovie"

@@ -20,14 +20,19 @@ import com.example.movieapp.databinding.ActivityMainBinding;
 import com.example.movieapp.presentation.adapter.MoviesAdapter;
 import com.example.movieapp.presentation.viewmodel.MoviesViewModel;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ClickHandlers, View.OnClickListener {
 
     ActivityMainBinding binding;
     MoviesViewModel viewModel;
+    MoviesAdapter adapter;
+
+    final static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("MainActivity", "onCreate");
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
@@ -42,8 +47,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
             if(viewModel.getSelectedMovie().getValue() == null){
                 viewModel.updateSelectedMovie(movieList.get(0));
             }
-            Log.i(this.getClass().getSimpleName(), "Movie count: " + movieList.size());
-            binding.recyclerView.setAdapter(new MoviesAdapter(movieList, this));
+            Log.i(TAG, "Movie count: " + movieList.size());
+            adapter = new MoviesAdapter(movieList, this);
+            binding.recyclerView.setAdapter(adapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         });
     }
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
         Resources resources = getResources();
         Configuration config = resources.getConfiguration();
 
-        Log.i(MainActivity.class.getSimpleName(), "Orientation: " + config.orientation);
+        Log.i(TAG, "Orientation: " + config.orientation);
 
         if(config.orientation == Configuration.ORIENTATION_PORTRAIT){
             Intent intent = new Intent(this, MovieDetailsActivity.class);
@@ -74,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
 
     @Override
     public void onClick(View v) {
+
+        // On Click Add button
         Intent intent = new Intent(this, AddMovieActivity.class);
         startActivityIfNeeded(intent, AddMovieActivity.REQUEST_CODE);
     }
@@ -82,7 +90,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == AddMovieActivity.REQUEST_CODE){
-            Log.d("MainActivity", "Add movie result");
+            if(resultCode == RESULT_OK){
+                Movie movie = (Movie) data.getSerializableExtra("movie");
+                Log.d(TAG, "Add movie result");
+                Log.d(TAG, "Movie Title: " + movie.getTitle());
+                viewModel.addMovie(movie.getMovieInfo(), movieInfo -> {
+                    adapter.setMovieList(viewModel.getMovieList().getValue());
+                    Log.d(TAG, "Movie List Count: " + viewModel.getMovieList().getValue().size());
+                });
+            }
         }
     }
 }

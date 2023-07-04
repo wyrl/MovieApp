@@ -34,8 +34,7 @@ public class MovieRepository {
     private void loadData(){
         Log.d("MovieRepository", "loadData");
         MovieDatabase.databaseWriteExecutor.execute(() -> {
-            fetchFromAPI();
-            /*List<Movie> movieList = db.movieDao().getAll();
+            List<Movie> movieList = db.movieDao().getAll();
             if(movieList.size() != 0){
                 movies.postValue(movieList);
                 Log.d("MovieRepository", "Load from database");
@@ -43,7 +42,7 @@ public class MovieRepository {
             else{
                 fetchFromAPI();
                 Log.d("MovieRepository", "Load from API");
-            }*/
+            }
         });
     }
 
@@ -77,14 +76,28 @@ public class MovieRepository {
         }
     }
 
+    private void insertMovie(Movie movie){
+        MovieDatabase.databaseWriteExecutor.execute(() -> {
+            db.movieDao().insert(movie);
+        });
+    }
+
     public void addMovie(MovieInfo movieInfo, AddMovieListener callback){
         RetrofitInstance.api.addMovie(movieInfo).enqueue(new Callback<MovieInfo>() {
             @Override
             public void onResponse(Call<MovieInfo> call, Response<MovieInfo> response) {
 
                 if(response.isSuccessful()){
-                    Log.d("MovieRepository", "Success: addMovie -> isSuccess: " + response.body().getTitle());
-                    callback.onAddedMovie(response.body());
+                    MovieInfo info = response.body();
+                    Log.d("MovieRepository", "Success: addMovie -> isSuccess: " + info.getTitle());
+                    insertMovie(new Movie(
+                        info.getTitle(),
+                            info.getPlot(),
+                            info.getReleased(),
+                            Double.parseDouble(info.getImdbRating()),
+                            info.getImages().get(0)
+                    ));
+                    callback.onAddedMovie(info);
                 }
                 else{
                     Log.e("MovieRepository", "Failure: addMovie -> " + response.message());

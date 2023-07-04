@@ -1,5 +1,6 @@
 package com.example.movieapp.presentation.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,28 +18,47 @@ import com.example.movieapp.repository.AddMovieListener;
 
 public class AddMovieActivity extends AppCompatActivity implements View.OnClickListener {
 
+    final static String TAG = "AddMovieActivity";
     public static int REQUEST_CODE = 1;
     ActivityAddMovieBinding binding;
-    MoviesViewModel viewModel;
 
     Movie movie;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_movie);
-        viewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
         movie = new Movie();
         binding.setMovie(movie);
         binding.btnAddMovie.setOnClickListener(this);
+        binding.btnBack.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        viewModel.addMovie(movie.getMovieInfo(), movieInfo -> {
-            Log.d("AddMovieActivity", "Added Movie: " + movieInfo.getTitle());
-            setResult(REQUEST_CODE);
-            finish();
-        });
+
+        if(view.getId() == R.id.btnBack){
+            onBackClick(view);
+            return;
+        }
+
+        if(view.getId() == R.id.btnAddMovie){
+            onAddMovieClick(view);
+            return;
+        }
+    }
+
+
+    private void onBackClick(View view){
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
+    private void onAddMovieClick(View view) {
+        Intent intent = new Intent();
+        intent.putExtra("movie", movie);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

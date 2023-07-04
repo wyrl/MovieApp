@@ -34,7 +34,16 @@ public class MoviesViewModel extends AndroidViewModel {
     }
 
     public void addMovie(MovieInfo movieInfo, AddMovieListener callback){
-        repository.addMovie(movieInfo, callback);
+        repository.addMovie(movieInfo, m -> {
+            movieList.getValue().add(new Movie(
+                    m.getTitle(),
+                    m.getPlot(),
+                    m.getReleased(),
+                    Double.parseDouble(m.getImdbRating()),
+                    m.getImages().get(0)
+            ));
+            callback.onAddedMovie(m);
+        });
     }
 
     public LiveData<List<Movie>> getMovieList(){
