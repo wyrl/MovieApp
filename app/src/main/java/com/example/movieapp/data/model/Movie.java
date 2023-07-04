@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -28,15 +30,19 @@ public class Movie implements Serializable {
 
     @ColumnInfo(name = "image_url")
     private String imageUrl;
-
-    public Movie(String title){
-        this.setTitle(title);
-        this.setDescription("");
+    public Movie(){}
+    public Movie(String title, String description, String yearReleased, double ratings, String imageUrl) {
+        this.title = title;
+        this.description = description;
+        this.yearReleased = yearReleased;
+        this.ratings = ratings;
+        this.imageUrl = imageUrl;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -81,24 +87,43 @@ public class Movie implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public static List<Movie> convertFrom(List<MovieInfo> movieInfoList){
+    public static List<Movie> convertFrom(List<MovieInfo> movieInfoList) {
         List<Movie> movies = new ArrayList<>();
-        for (MovieInfo info: movieInfoList) {
-            Movie movie = new Movie(info.getTitle());
-            movie.setYearReleased(info.getReleased());
-            movie.setImageUrl(info.getImages().get(0));
+        for (MovieInfo info : movieInfoList) {
 
-            if(!info.getImdbRating().equals("N/A")){
-                movie.setRatings(Double.parseDouble(info.getImdbRating()));
+            double ratings;
+            if (!info.getImdbRating().equals("N/A")) {
+                ratings = Double.parseDouble(info.getImdbRating());
+            } else {
+                ratings = 0;
             }
-            else{
-                movie.setRatings(0);
-            }
-            movie.setDescription(info.getPlot());
 
-            movies.add(movie);
+            movies.add(new Movie(
+                    info.getTitle(),
+                    info.getPlot(),
+                    info.getReleased(),
+                    ratings,
+                    info.getImages().get(0)
+            ));
+
         }
 
         return movies;
     }
+
+    public MovieInfo getMovieInfo() {
+        return new MovieInfo(
+                title,
+                yearReleased,
+                description,
+                String.valueOf(ratings),
+                Collections.singletonList(imageUrl)
+        );
+    }
+
+    public String toString() {
+        return "Movie Title: " + title;
+    }
+
+
 }

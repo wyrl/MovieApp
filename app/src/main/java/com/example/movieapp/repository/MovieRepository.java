@@ -34,7 +34,8 @@ public class MovieRepository {
     private void loadData(){
         Log.d("MovieRepository", "loadData");
         MovieDatabase.databaseWriteExecutor.execute(() -> {
-            List<Movie> movieList = db.movieDao().getAll();
+            fetchFromAPI();
+            /*List<Movie> movieList = db.movieDao().getAll();
             if(movieList.size() != 0){
                 movies.postValue(movieList);
                 Log.d("MovieRepository", "Load from database");
@@ -42,7 +43,7 @@ public class MovieRepository {
             else{
                 fetchFromAPI();
                 Log.d("MovieRepository", "Load from API");
-            }
+            }*/
         });
     }
 
@@ -63,7 +64,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<List<MovieInfo>> call, @NonNull Throwable t) {
-                Log.d("MovieRepository", "Failure...");
+                Log.d("MovieRepository", "Failure: fetFromAPI -> " + t.getMessage());
             }
         });
     }
@@ -76,7 +77,26 @@ public class MovieRepository {
         }
     }
 
+    public void addMovie(MovieInfo movieInfo, AddMovieListener callback){
+        RetrofitInstance.api.addMovie(movieInfo).enqueue(new Callback<MovieInfo>() {
+            @Override
+            public void onResponse(Call<MovieInfo> call, Response<MovieInfo> response) {
 
+                if(response.isSuccessful()){
+                    Log.d("MovieRepository", "Success: addMovie -> isSuccess: " + response.body().getTitle());
+                    callback.onAddedMovie(response.body());
+                }
+                else{
+                    Log.e("MovieRepository", "Failure: addMovie -> " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieInfo> call, Throwable t) {
+                Log.d("MovieRepository", "Failure: addMovie -> " + t.getMessage());
+            }
+        });
+    }
 
     public LiveData<List<Movie>> getMovies(){
         return movies;

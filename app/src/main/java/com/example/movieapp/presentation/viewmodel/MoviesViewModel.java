@@ -10,6 +10,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.movieapp.data.model.Movie;
+import com.example.movieapp.data.model.MovieInfo;
+import com.example.movieapp.repository.AddMovieListener;
 import com.example.movieapp.repository.MovieRepository;
 
 import java.util.List;
@@ -30,6 +32,11 @@ public class MoviesViewModel extends AndroidViewModel {
 
         selectedMovie = new MutableLiveData<>();
     }
+
+    public void addMovie(MovieInfo movieInfo, AddMovieListener callback){
+        repository.addMovie(movieInfo, callback);
+    }
+
     public LiveData<List<Movie>> getMovieList(){
         return movieList;
     }

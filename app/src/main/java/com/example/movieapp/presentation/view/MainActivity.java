@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -74,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, AddMovieActivity.class);
-        startActivity(intent);
+        startActivityIfNeeded(intent, AddMovieActivity.REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == AddMovieActivity.REQUEST_CODE){
+            Log.d("MainActivity", "Add movie result");
+        }
     }
 }
