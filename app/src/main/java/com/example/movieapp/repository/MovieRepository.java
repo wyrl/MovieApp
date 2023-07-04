@@ -94,7 +94,7 @@ public class MovieRepository {
                         info.getTitle(),
                             info.getPlot(),
                             info.getReleased(),
-                            Double.parseDouble(info.getImdbRating()),
+                            info.getImdbRating(),
                             info.getImages().get(0)
                     ));
                     callback.onAddedMovie(info);

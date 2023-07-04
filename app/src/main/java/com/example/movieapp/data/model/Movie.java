@@ -26,12 +26,12 @@ public class Movie implements Serializable {
     private String yearReleased;
 
     @ColumnInfo(name = "ratings")
-    private double ratings;
+    private String ratings;
 
     @ColumnInfo(name = "image_url")
     private String imageUrl;
     public Movie(){}
-    public Movie(String title, String description, String yearReleased, double ratings, String imageUrl) {
+    public Movie(String title, String description, String yearReleased, String ratings, String imageUrl) {
         this.title = title;
         this.description = description;
         this.yearReleased = yearReleased;
@@ -71,11 +71,11 @@ public class Movie implements Serializable {
         this.yearReleased = yearReleased;
     }
 
-    public double getRatings() {
+    public String getRatings() {
         return ratings;
     }
 
-    public void setRatings(double ratings) {
+    public void setRatings(String ratings){
         this.ratings = ratings;
     }
 
@@ -90,22 +90,13 @@ public class Movie implements Serializable {
     public static List<Movie> convertFrom(List<MovieInfo> movieInfoList) {
         List<Movie> movies = new ArrayList<>();
         for (MovieInfo info : movieInfoList) {
-
-            double ratings;
-            if (!info.getImdbRating().equals("N/A")) {
-                ratings = Double.parseDouble(info.getImdbRating());
-            } else {
-                ratings = 0;
-            }
-
             movies.add(new Movie(
                     info.getTitle(),
                     info.getPlot(),
                     info.getReleased(),
-                    ratings,
+                    info.getImdbRating(),
                     info.getImages().get(0)
             ));
-
         }
 
         return movies;

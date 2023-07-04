@@ -63,6 +63,12 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter Year Released"
                 android:text="@={movie.yearReleased}"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Ratings"
+                android:inputType="numberDecimal"
+                android:text="@={movie.ratings}"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -75,7 +81,8 @@
                 android:layout_height="170dp"
                 android:gravity="top"
                 android:text="@={movie.description}"
-                android:hint="Enter Description"/>
+                android:hint="Enter Description"
+                android:inputType="textMultiLine"/>
 
             <Button
                 android:id="@+id/btnAddMovie"
@@ -83,6 +90,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Add Movie" />
+
+            <TextView
+                android:id="@+id/txtErrMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error_color"
+                android:textSize="18dp"
+                android:layout_marginTop="10dp"
+                tools:text="Error Message"
+                />
+
         </LinearLayout>
 
 

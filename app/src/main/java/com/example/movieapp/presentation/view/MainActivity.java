@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
 
     private void setupRecyclerAdapter(){
         viewModel.getMovieList().observe(this, movieList -> {
+            Log.d(TAG, "SetupRecyclerAdapter observer -> movie list count: " + movieList.size());
             if(viewModel.getSelectedMovie().getValue() == null){
                 viewModel.updateSelectedMovie(movieList.get(0));
             }
@@ -79,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     }
 
     @Override
-    public void onClick(View v) {
-
-        // On Click Add button
+    public void onClick(View v) { // On Click Add button
         Intent intent = new Intent(this, AddMovieActivity.class);
         startActivityIfNeeded(intent, AddMovieActivity.REQUEST_CODE);
     }
@@ -94,11 +93,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
                 Movie movie = (Movie) data.getSerializableExtra("movie");
                 Log.d(TAG, "Add movie result");
                 Log.d(TAG, "Movie Title: " + movie.getTitle());
-                viewModel.addMovie(movie.getMovieInfo(), movieInfo -> {
-                    adapter.setMovieList(viewModel.getMovieList().getValue());
-                    Log.d(TAG, "Movie List Count: " + viewModel.getMovieList().getValue().size());
-
-                });
+                viewModel.addMovie(movie.getMovieInfo());
             }
         }
     }

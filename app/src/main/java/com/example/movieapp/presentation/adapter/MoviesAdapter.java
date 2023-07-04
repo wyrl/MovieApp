@@ -58,11 +58,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     }
 
-    public void setMovieList(List<Movie> movieList){
-        this.movieList = movieList;
-        notifyDataSetChanged();
-    }
-
     public interface ClickHandlers{
         void onSelected(Movie movie);
     }
