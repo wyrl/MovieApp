@@ -59,6 +59,13 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = new Intent();
         intent.putExtra("movie", movie);
         setResult(RESULT_OK, intent);
+
+        clearFields();
+
         finish();
+    }
+
+    private void clearFields() {
+        movie = null;
     }
 }

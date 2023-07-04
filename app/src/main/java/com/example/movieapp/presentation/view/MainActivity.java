@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
                 viewModel.addMovie(movie.getMovieInfo(), movieInfo -> {
                     adapter.setMovieList(viewModel.getMovieList().getValue());
                     Log.d(TAG, "Movie List Count: " + viewModel.getMovieList().getValue().size());
+
                 });
             }
         }
