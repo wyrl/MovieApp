@@ -50,10 +50,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
 
         viewModel.getMovieList().observe(this, movieList -> {
             Log.d(TAG, "SetupRecyclerAdapter observer -> movie list count: " + movieList.size());
-            if(viewModel.getSelectedMovie().getValue() == null){
+            if(viewModel.getSelectedMovie().getValue() == null){ // Default Selected first item
                 viewModel.updateSelectedMovie(movieList.get(0));
             }
-            Log.i(TAG, "Movie count: " + movieList.size());
             adapter.setMovieList(movieList);
         });
     }
@@ -91,6 +90,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.refreshList();
+        viewModel.refreshListFromLocal();
     }
 }

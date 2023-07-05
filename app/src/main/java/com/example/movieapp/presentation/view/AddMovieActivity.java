@@ -1,10 +1,9 @@
 package com.example.movieapp.presentation.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -13,10 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.movieapp.R;
 import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.data.model.MovieInfo;
+import com.example.movieapp.data.service.AddMovieListener;
 import com.example.movieapp.databinding.ActivityAddMovieBinding;
 import com.example.movieapp.presentation.viewmodel.AddMovieViewModel;
-import com.example.movieapp.presentation.viewmodel.MoviesViewModel;
-import com.example.movieapp.repository.AddMovieListener;
 
 public class AddMovieActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,13 +60,19 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
     private void onAddMovieClick(View view) {
 
         if(checkValid()){
-            /*Intent intent = new Intent();
-            intent.putExtra("movie", movie);
-            setResult(RESULT_OK, intent);*/
-            viewModel.addMovie(movie.getMovieInfo(), movieInfo -> {
-                clearFields();
-                setResult(RESULT_OK);
-                finish();
+            viewModel.addMovie(movie.getMovieInfo(), new AddMovieListener() {
+                @Override
+                public void onAddedMovie(MovieInfo movieInfo) {
+                    clearFields();
+                    setResult(RESULT_OK);
+                    finish();
+                }
+
+                @Override
+                public void onAddingMovieFailure(String errorMessage) {
+                    Log.e(TAG, errorMessage);
+                    Toast.makeText(AddMovieActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                }
             });
         }
     }

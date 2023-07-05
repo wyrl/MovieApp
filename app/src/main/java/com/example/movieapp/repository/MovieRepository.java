@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.movieapp.data.database.MovieDatabase;
 import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.data.model.MovieInfo;
+import com.example.movieapp.data.service.AddMovieListener;
 import com.example.movieapp.data.service.RetrofitInstance;
 
 import java.util.List;
@@ -46,12 +47,11 @@ public class MovieRepository {
         });
     }
 
-    public LiveData<List<Movie>> getAllMoviesFromLocal(){
+    public void refreshListFromLocal(){
         MovieDatabase.databaseWriteExecutor.execute(() -> {
             List<Movie> movieList = db.movieDao().getAll();
             movies.postValue(movieList);
         });
-        return movies;
     }
 
     private void fetchFromAPI(){
@@ -108,12 +108,14 @@ public class MovieRepository {
                     callback.onAddedMovie(info);
                 }
                 else{
+                    callback.onAddingMovieFailure("Response Failure: " + response.message());
                     Log.e("MovieRepository", "Failure: addMovie -> " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<MovieInfo> call, Throwable t) {
+                callback.onAddingMovieFailure("Response Failure: " + t.getMessage());
                 Log.d("MovieRepository", "Failure: addMovie -> " + t.getMessage());
             }
         });

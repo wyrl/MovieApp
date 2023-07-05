@@ -1,8 +1,6 @@
 package com.example.movieapp.presentation.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,11 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.movieapp.data.model.Movie;
-import com.example.movieapp.data.model.MovieInfo;
-import com.example.movieapp.repository.AddMovieListener;
 import com.example.movieapp.repository.MovieRepository;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class MoviesViewModel extends AndroidViewModel {
@@ -46,8 +41,8 @@ public class MoviesViewModel extends AndroidViewModel {
         selectedMovie.setValue(movie);
     }
 
-    public void refreshList(){
-        movieList.postValue(repository.getAllMoviesFromLocal().getValue());
+    public void refreshListFromLocal(){
+        repository.refreshListFromLocal();
     }
 
 }
