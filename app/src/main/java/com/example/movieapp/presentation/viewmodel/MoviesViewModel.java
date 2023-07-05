@@ -34,20 +34,6 @@ public class MoviesViewModel extends AndroidViewModel {
         selectedMovie = new MutableLiveData<>();
     }
 
-    public void addMovie(MovieInfo movieInfo) {
-        repository.addMovie(movieInfo, m -> {
-            List<Movie> list = movieList.getValue();
-            list.add(new Movie(
-                    m.getTitle(),
-                    m.getPlot(),
-                    m.getReleased(),
-                    m.getImdbRating(),
-                    m.getImages().get(0)
-            ));
-            movieList.setValue(list);
-        });
-    }
-
     public LiveData<List<Movie>> getMovieList() {
         return movieList;
     }
@@ -58,6 +44,10 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public void updateSelectedMovie(Movie movie) {
         selectedMovie.setValue(movie);
+    }
+
+    public void refreshList(){
+        movieList.postValue(repository.getAllMoviesFromLocal().getValue());
     }
 
 }

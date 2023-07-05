@@ -21,6 +21,7 @@ import com.example.movieapp.presentation.adapter.MoviesAdapter;
 import com.example.movieapp.presentation.viewmodel.MoviesViewModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ClickHandlers, View.OnClickListener {
 
@@ -43,15 +44,17 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     }
 
     private void setupRecyclerAdapter(){
+        adapter = new MoviesAdapter(this);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         viewModel.getMovieList().observe(this, movieList -> {
             Log.d(TAG, "SetupRecyclerAdapter observer -> movie list count: " + movieList.size());
             if(viewModel.getSelectedMovie().getValue() == null){
                 viewModel.updateSelectedMovie(movieList.get(0));
             }
             Log.i(TAG, "Movie count: " + movieList.size());
-            adapter = new MoviesAdapter(movieList, this);
-            binding.recyclerView.setAdapter(adapter);
-            binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            adapter.setMovieList(movieList);
         });
     }
 
@@ -86,15 +89,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AddMovieActivity.REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                /*Movie movie = (Movie) data.getSerializableExtra("movie");
-                Log.d(TAG, "Add movie result");
-                Log.d(TAG, "Movie Title: " + movie.getTitle());
-                viewModel.addMovie(movie.getMovieInfo());*/
-            }
-        }
+    protected void onResume() {
+        super.onResume();
+        viewModel.refreshList();
     }
 }

@@ -46,6 +46,14 @@ public class MovieRepository {
         });
     }
 
+    public LiveData<List<Movie>> getAllMoviesFromLocal(){
+        MovieDatabase.databaseWriteExecutor.execute(() -> {
+            List<Movie> movieList = db.movieDao().getAll();
+            movies.postValue(movieList);
+        });
+        return movies;
+    }
+
     private void fetchFromAPI(){
         Log.d("MovieRepository", "fetchFromAPI");
         RetrofitInstance.api.getMovies().enqueue(new Callback<List<MovieInfo>>() {
