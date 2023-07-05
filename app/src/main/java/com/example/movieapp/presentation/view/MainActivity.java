@@ -90,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == AddMovieActivity.REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                Movie movie = (Movie) data.getSerializableExtra("movie");
+                /*Movie movie = (Movie) data.getSerializableExtra("movie");
                 Log.d(TAG, "Add movie result");
                 Log.d(TAG, "Movie Title: " + movie.getTitle());
-                viewModel.addMovie(movie.getMovieInfo());
+                viewModel.addMovie(movie.getMovieInfo());*/
             }
         }
     }

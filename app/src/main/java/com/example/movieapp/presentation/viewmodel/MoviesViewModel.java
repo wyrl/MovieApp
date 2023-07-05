@@ -44,7 +44,7 @@ public class MoviesViewModel extends AndroidViewModel {
                     m.getImdbRating(),
                     m.getImages().get(0)
             ));
-            movieList.postValue(list);
+            movieList.setValue(list);
         });
     }
 

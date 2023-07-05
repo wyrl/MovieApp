@@ -14,6 +14,7 @@ import com.example.movieapp.R;
 import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.data.model.MovieInfo;
 import com.example.movieapp.databinding.ActivityAddMovieBinding;
+import com.example.movieapp.presentation.viewmodel.AddMovieViewModel;
 import com.example.movieapp.presentation.viewmodel.MoviesViewModel;
 import com.example.movieapp.repository.AddMovieListener;
 
@@ -23,8 +24,9 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
     public static int REQUEST_CODE = 1;
     ActivityAddMovieBinding binding;
 
-    Movie movie;
+    AddMovieViewModel viewModel;
 
+    Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
         binding.setMovie(movie);
         binding.btnAddMovie.setOnClickListener(this);
         binding.btnBack.setOnClickListener(this);
+
+        viewModel = new ViewModelProvider(this).get(AddMovieViewModel.class);
     }
 
     @Override
@@ -50,7 +54,6 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
     private void onBackClick(View view){
         setResult(RESULT_CANCELED);
         finish();
@@ -59,13 +62,14 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
     private void onAddMovieClick(View view) {
 
         if(checkValid()){
-            Intent intent = new Intent();
+            /*Intent intent = new Intent();
             intent.putExtra("movie", movie);
-            setResult(RESULT_OK, intent);
-
-            clearFields();
-
-            finish();
+            setResult(RESULT_OK, intent);*/
+            viewModel.addMovie(movie.getMovieInfo(), movieInfo -> {
+                clearFields();
+                setResult(RESULT_OK);
+                finish();
+            });
         }
     }
 
