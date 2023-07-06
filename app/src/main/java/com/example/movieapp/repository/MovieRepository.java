@@ -105,7 +105,7 @@ public class MovieRepository {
                             info.getImdbRating(),
                             info.getImages().get(0)
                     ));
-                    callback.onAddedMovie(info);
+                    callback.onAddedMovie();
                 }
                 else{
                     callback.onAddingMovieFailure("Response Failure: " + response.message());

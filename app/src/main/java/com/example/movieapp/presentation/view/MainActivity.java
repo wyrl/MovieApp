@@ -29,12 +29,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     MoviesViewModel viewModel;
     MoviesAdapter adapter;
 
+
     final static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
         binding.setViewModel(viewModel);
@@ -84,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
     @Override
     public void onClick(View v) { // On Click Add button
         Intent intent = new Intent(this, AddMovieActivity.class);
-        startActivityIfNeeded(intent, AddMovieActivity.REQUEST_CODE);
+        startActivity(intent);
+        //startActivityIfNeeded(intent, AddMovieActivity.REQUEST_CODE);
     }
 
     @Override
