@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,9 +18,6 @@ import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.databinding.ActivityMainBinding;
 import com.example.movieapp.presentation.adapter.MoviesAdapter;
 import com.example.movieapp.presentation.viewmodel.MoviesViewModel;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ClickHandlers, View.OnClickListener {
 
@@ -52,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
 
         viewModel.getMovieList().observe(this, movieList -> {
             Log.d(TAG, "SetupRecyclerAdapter observer -> movie list count: " + movieList.size());
-            if(viewModel.getSelectedMovie().getValue() == null){ // Default Selected first item
+            if(movieList.size() != 0 && viewModel.getSelectedMovie().getValue() == null){ // Default Selected first item
                 viewModel.updateSelectedMovie(movieList.get(0));
             }
             adapter.setMovieList(movieList);
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Cli
         }
         else if(config.orientation  == Configuration.ORIENTATION_LANDSCAPE){
             viewModel.updateSelectedMovie(movie);
-            loadMovieDetailsImage(movie.getImageUrl());
+            loadMovieDetailsImage(movie.getBackdropImageUrl());
         }
     }
 

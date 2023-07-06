@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.data.model.MovieInfo;
 import com.example.movieapp.data.service.AddMovieListener;
 import com.example.movieapp.data.service.ApiResponse;
@@ -17,8 +18,6 @@ public class AddMovieViewModel extends AndroidViewModel {
     private MovieRepository repository;
 
     private MutableLiveData<ApiResponse> response = new MutableLiveData<>();
-
-
 
     public AddMovieViewModel(@NonNull Application application) {
         super(application);

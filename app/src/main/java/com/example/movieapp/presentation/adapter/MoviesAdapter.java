@@ -40,7 +40,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         holder.itemView.setOnClickListener(v -> clickHandlers.onSelected(movie));
 
         Glide.with(holder.binding.getRoot())
-                .load(movie.getImageUrl())
+                .load(movie.getBackdropImageUrl())
                 .into(holder.binding.bgImg);
     }
 
