@@ -1,5 +1,6 @@
 package com.example.movieapp.presentation.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.example.movieapp.presentation.viewmodel.AddMovieViewModel;
 public class AddMovieActivity extends AppCompatActivity implements View.OnClickListener {
 
     final static String TAG = "AddMovieActivity";
-    public static int REQUEST_CODE = 1;
     ActivityAddMovieBinding binding;
 
     AddMovieViewModel viewModel;
@@ -28,7 +28,9 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_movie);
         movie = new Movie();
         binding.setMovie(movie);
@@ -36,44 +38,44 @@ public class AddMovieActivity extends AppCompatActivity implements View.OnClickL
         binding.btnBack.setOnClickListener(this);
 
         viewModel = new ViewModelProvider(this).get(AddMovieViewModel.class);
+
+        observer();
+    }
+
+    private void observer(){
+        viewModel.getApiResponse().observe(this, response -> {
+            if(response.isSuccess()){
+                clearFields();
+                finish();
+            }
+            else{
+                Log.e(TAG, response.getMessage());
+                Toast.makeText(AddMovieActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
 
         if(view.getId() == R.id.btnBack){
-            onBackClick(view);
+            onBackClick();
             return;
         }
 
         if(view.getId() == R.id.btnAddMovie){
-            onAddMovieClick(view);
+            onAddMovieClick();
             return;
         }
     }
 
-    private void onBackClick(View view){
-        setResult(RESULT_CANCELED);
+    private void onBackClick(){
         finish();
     }
 
-    private void onAddMovieClick(View view) {
-
+    private void onAddMovieClick() {
         if(checkValid()){
-            viewModel.addMovie(movie.getMovieInfo(), new AddMovieListener() {
-                @Override
-                public void onAddedMovie(MovieInfo movieInfo) {
-                    clearFields();
-                    setResult(RESULT_OK);
-                    finish();
-                }
-
-                @Override
-                public void onAddingMovieFailure(String errorMessage) {
-                    Log.e(TAG, errorMessage);
-                    Toast.makeText(AddMovieActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                }
-            });
+            viewModel.addMovie(movie.getMovieInfo());
         }
     }
 
