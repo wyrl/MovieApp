@@ -13,8 +13,10 @@ import com.example.movieapp.R;
 import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.databinding.ActivityMovieDetailsBinding;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+import java.util.List;
 
+public class MovieDetailsActivity extends AppCompatActivity {
+    private final static String TAG = MovieDetailsActivity.class.getSimpleName();
     ActivityMovieDetailsBinding binding;
 
     @Override
@@ -25,16 +27,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Intent i = getIntent();
         Movie movie = (Movie) i.getSerializableExtra("movie");
         binding.setMovie(movie);
-        loadImage(movie.getImageUrl());
+        loadImages(movie.getImageUrl(), movie.getBackdropImageUrl());
     }
 
-    private void loadImage(String url){
+    private void loadImages(String imageUrl, String backdropImageUrl) {
         Glide.with(this)
-                .load(url)
+                .load(imageUrl)
                 .into(binding.includedLayout.imageView);
+
+        Log.d(TAG, "Background Image Url: " + backdropImageUrl);
+
+        Glide.with(this)
+                .load(backdropImageUrl)
+                .into(binding.includedLayout.backgroundImage);
     }
 
-    public void onBackClicked(View view){
+    public void onBackClicked(View view) {
         finish();
     }
 }

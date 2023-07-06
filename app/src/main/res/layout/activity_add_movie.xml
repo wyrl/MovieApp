@@ -58,11 +58,23 @@
                 android:hint="Enter Title"
                 android:text="@={movie.title}"/>
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Year Released"
-                android:text="@={movie.yearReleased}"/>
+                android:orientation="horizontal">
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Date Released"
+                    android:text="@={movie.dateReleased}"/>
+                <Button
+                    android:id="@+id/btnPickDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick" />
+            </LinearLayout>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,6 +86,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={movie.imageUrl}"
+                android:hint="Enter Image Link" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={movie.backdropImageUrl}"
                 android:hint="Enter Backdrop Image Link" />
 
             <EditText
