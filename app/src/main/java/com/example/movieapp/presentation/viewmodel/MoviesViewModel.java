@@ -16,30 +16,33 @@ public class MoviesViewModel extends AndroidViewModel {
 
     private MovieRepository repository;
 
-    private final LiveData<List<Movie>> movieList;
+    private final MutableLiveData<List<Movie>> movieList;
     private final MutableLiveData<Movie> selectedMovie;
 
-    public MoviesViewModel(@NonNull Application application){
+    public MoviesViewModel(@NonNull Application application) {
         super(application);
 
         repository = new MovieRepository(application);
 
-        movieList = repository.getMovies();
+        movieList = (MutableLiveData<List<Movie>>) repository.getMovies();
 
         selectedMovie = new MutableLiveData<>();
     }
-    public LiveData<List<Movie>> getMovieList(){
+
+    public LiveData<List<Movie>> getMovieList() {
         return movieList;
     }
 
-    public LiveData<Movie> getSelectedMovie(){
+    public LiveData<Movie> getSelectedMovie() {
         return selectedMovie;
     }
 
-    public void updateSelectedMovie(Movie movie){
+    public void updateSelectedMovie(Movie movie) {
         selectedMovie.setValue(movie);
     }
 
-
+    public void refreshListFromLocal(){
+        repository.refreshListFromLocal();
+    }
 
 }

@@ -13,13 +13,13 @@ import com.example.movieapp.R;
 import com.example.movieapp.data.model.Movie;
 import com.example.movieapp.databinding.MovieItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>{
-    final List<Movie> movieList;
+    private List<Movie> movieList = new ArrayList<>();
     final MoviesAdapter.ClickHandlers clickHandlers;
-    public MoviesAdapter(List<Movie> movieList, MoviesAdapter.ClickHandlers clickHandlers){
-        this.movieList = movieList;
+    public MoviesAdapter(MoviesAdapter.ClickHandlers clickHandlers){
         this.clickHandlers = clickHandlers;
     }
 
@@ -56,6 +56,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             this.binding = binding;
         }
 
+    }
+
+    public void setMovieList(List<Movie> movieList){
+        this.movieList = movieList;
+        notifyDataSetChanged();
     }
 
     public interface ClickHandlers{

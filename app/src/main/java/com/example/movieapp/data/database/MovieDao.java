@@ -16,4 +16,7 @@ public interface MovieDao {
 
     @Insert
     void insertAll(List<Movie> movies);
+
+    @Insert
+    void insert(Movie movie);
 }
